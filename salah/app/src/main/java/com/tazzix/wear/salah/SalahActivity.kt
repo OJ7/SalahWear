@@ -25,6 +25,7 @@ import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenStarted
+import com.azan.Time
 import com.tazzix.wear.salah.complication.SalahComplicationProviderService.Companion.forceComplicationUpdate
 import com.tazzix.wear.salah.data.LocationViewModel
 import com.tazzix.wear.salah.data.MyLocation
@@ -32,6 +33,9 @@ import com.tazzix.wear.salah.data.ResolvedLocation
 import com.tbruyelle.rxpermissions2.RxPermissions
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.awaitSingle
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 class SalahActivity : FragmentActivity() {
     private lateinit var locationViewModel: LocationViewModel
@@ -132,12 +136,18 @@ class SalahActivity : FragmentActivity() {
             locality,
             getTimeAgo(time)
         )
-        fajr.text = pInfo.fajr.toString().dropLast(3)
-        sunrise.text = pInfo.sunrise.toString().dropLast(3)
-        dhuhur.text = pInfo.dhuhur.toString().dropLast(3)
-        asr.text = pInfo.asr.toString().dropLast(3)
-        maghrib.text = pInfo.maghrib.toString().dropLast(3)
-        isha.text = pInfo.isha.toString().dropLast(3)
+
+        fajr.text = formatTime(pInfo.fajr)
+        sunrise.text = formatTime(pInfo.sunrise)
+        dhuhur.text = formatTime(pInfo.dhuhur)
+        asr.text = formatTime(pInfo.asr)
+        maghrib.text = formatTime(pInfo.maghrib)
+        isha.text = formatTime(pInfo.isha)
+    }
+
+    private fun formatTime(time: Time): String {
+        return LocalTime.parse(time.toString(), DateTimeFormatter.ofPattern("H:m:ss"))
+                .format(DateTimeFormatter.ofPattern("h:mm a")).lowercase(Locale.ROOT)
     }
 
     override fun onStop() {
