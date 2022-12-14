@@ -52,7 +52,6 @@ fun Context.getAddressDescription(location: MyLocation, resolveLocality: Boolean
     if (locationVal.isEmpty()) locationVal = String.format("%.3f, %.3f", location.latitude, location.longitude)
 
     val today = SimpleDate(GregorianCalendar())
-    // Subtract 1 from DST due to bug in library: https://github.com/ahmedeltaher/Prayer-Times-Android-Azan/issues/27#issue-866377567
     val loc = Location(location.latitude, location.longitude, TimeZone.getDefault().rawOffset.toDouble()/3600000, TimeZone.getDefault().dstSavings/3600000)
     val method = when(location.method) {
         0 -> Method.KARACHI_HANAF
